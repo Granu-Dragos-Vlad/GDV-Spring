@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.endava.spring.entities.Autor;
@@ -20,13 +21,9 @@ public class CarteController {
 	@Autowired
 	private CarteServices carteservices;
 
-	@PostMapping(path = "/carti/{nume}/{gen}/{numeautor}/{prenumeautor}/{nationalitate}/{numecititor}/{varsta}")
-	public void creazaCarte(@PathVariable String nume, @PathVariable String gen, @PathVariable String numeautor,
-			@PathVariable String prenumeautor, @PathVariable String nationalitate, @PathVariable String numecititor,
-			@PathVariable Integer varsta) {
-		Autor autor = new Autor(numeautor, prenumeautor, nationalitate);
-		Cititor cititor = new Cititor(numecititor, varsta);
-		carteservices.saveCarte(new Carte(nume, gen, autor, cititor));
+	@PostMapping(path = "/savcarte")
+	public String creazaCarte(@RequestBody Carte carte) {
+		 return carteservices.saveCarte(carte);
 	}
 
 	@GetMapping(path = "/carti")
@@ -44,13 +41,10 @@ public class CarteController {
 		carteservices.deleteCarte(id);
 	}
 
-	@PutMapping(path = "/carti/{id}/{nume}/{gen}/{numeautor}/{prenumeautor}/{nationalitate}/{numecititor}/{varsta}")
-	public void updCarte(@PathVariable Integer id, @PathVariable String nume, @PathVariable String gen,
-			@PathVariable String numeautor, @PathVariable String prenumeautor, @PathVariable String nationalitate,
-			@PathVariable String numecititor, @PathVariable Integer varsta) {
-		Carte carte = new Carte(nume, gen, new Autor(numeautor, prenumeautor, nationalitate),
-				new Cititor(numecititor, varsta));
+	@PutMapping(path = "/carti/{id}")
+	public void updCarte(@PathVariable int id, @RequestBody Carte carte) {
 		carteservices.updateCarte(carte, id);
 	}
 
 }
+
